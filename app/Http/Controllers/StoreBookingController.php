@@ -8,6 +8,7 @@ use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 
 class StoreBookingController extends Controller
@@ -31,9 +32,7 @@ class StoreBookingController extends Controller
         $booth = null;
 
         try {
-            // The row lock is held only while the reservation is committed.
-            // This prevents two concurrent requests from reserving the same booth.
-            $booking = DB::transaction(function () use ($validated, &$booth) {
+            $booking = DB::transaction(function () use ($validated, $request, &$booth) {
                 $booth = Booth::with('event')
                     ->lockForUpdate()
                     ->find($validated['booth_id']);
@@ -54,20 +53,18 @@ class StoreBookingController extends Controller
                     'total_price' => $booth->price,
                     'status' => 'pending',
                     'payment_status' => 'unpaid',
-                    'payment_expired_at' => now()->addHours(1),
+                    'payment_expired_at' => now()->addHour(),
                 ];
 
-                if (\Schema::hasColumn('bookings', 'user_id')) {
+                if (Schema::hasColumn('bookings', 'user_id')) {
                     $bookingData['user_id'] = $request->user()->id;
                 }
 
                 $booking = Booking::create($bookingData);
                 $booth->update(['status' => 'booked']);
-
                 return $booking->load('booth.event');
             });
 
-            // Do not keep a database transaction open while calling Midtrans.
             $paymentData = $this->midtransService->createTransaction($booking);
 
             return response()->json([
@@ -83,20 +80,13 @@ class StoreBookingController extends Controller
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            // If Midtrans fails after the booking is committed, release the booth
-            // and mark the booking cancelled so it cannot block the booth forever.
             if ($booking) {
                 DB::transaction(function () use ($booking) {
                     $lockedBooking = Booking::lockForUpdate()->find($booking->id);
-                    if (!$lockedBooking) {
-                        return;
-                    }
+                    if (!$lockedBooking) return;
 
                     if ($lockedBooking->payment_status !== 'paid') {
-                        $lockedBooking->update([
-                            'status' => 'cancelled',
-                            'payment_status' => 'failed',
-                        ]);
+                        $lockedBooking->update(['status' => 'cancelled', 'payment_status' => 'failed']);
                         $lockedBooking->booth()->update(['status' => 'available']);
                     }
                 });
@@ -108,10 +98,7 @@ class StoreBookingController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Booking gagal dibuat. Silakan coba lagi.',
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Booking gagal dibuat. Silakan coba lagi.'], 500);
         }
     }
 }

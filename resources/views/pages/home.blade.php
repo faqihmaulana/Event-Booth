@@ -1,5 +1,14 @@
 @extends('layouts.main')
 @section('content')
+<div class="container py-4">
+    <div class="p-4 p-lg-5 rounded-4 shadow-sm" style="background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(6,182,212,.08));border:1px solid rgba(99,102,241,.10)">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="badge rounded-pill text-bg-light border mb-3 px-3 py-2"><i class="fas fa-cube me-2"></i>3D Event Experience</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 	<div class="hero-wrap js-fullheight"

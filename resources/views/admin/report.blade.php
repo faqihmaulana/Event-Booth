@@ -199,7 +199,7 @@
                         <!-- Dropdown Laporan -->
                         <li class="nav-item dropdown">
                             <a href="#"
-                                class="nav-link dropdown-toggle {{ request()->routeIs('transaction') || request()->routeIs('admin.statistics*') || request()->routeIs('admin.report*') ? 'active' : '' }}"
+                                class="nav-link dropdown-toggle {{ request()->routeIs('transaction') || request()->routeIs('admin.statistics*') || request()->routeIs('report*') ? 'active' : '' }}"
                                 id="laporanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="far fa-file-alt me-2"></i>Laporan
                             </a>
@@ -213,8 +213,8 @@
                                         href="{{ route('admin.statistics') }}">Statistik</a>
                                 </li>
                                  <li>
-                                    <a class="dropdown-item {{ request()->routeIs('admin.report*') ? 'active' : '' }}"
-                                        href="{{ route('admin.report') }}">Rekap Laporan</a>
+                                    <a class="dropdown-item {{ request()->routeIs('report*') ? 'active' : '' }}"
+                                        href="{{ route('report') }}">Rekap Laporan</a>
                                 </li>
                             </ul>
                         </li>
@@ -298,7 +298,7 @@
                             <p class="mb-0 text-muted">Laporan komprehensif booking dan transaksi</p>
                         </div>
                         <div class="col-md-4 text-end">
-                            <a href="{{ route('admin.report.export') }}?{{ http_build_query(request()->query()) }}" 
+                            <a href="{{ route('report.export-excel') }}?{{ http_build_query(request()->query()) }}" 
                                class="btn btn-success export-btn">
                                 <i class="fas fa-file-excel me-1"></i> Export Excel
                             </a>
@@ -306,7 +306,7 @@
                     </div>
 
                     <!-- Filter Form -->
-                    <form method="GET" action="{{ route('admin.report') }}" class="mb-4">
+                    <form method="GET" action="{{ route('report') }}" class="mb-4">
                         <div class="row g-3">
                             <div class="col-md-2">
                                 <select name="event_id" class="form-select">

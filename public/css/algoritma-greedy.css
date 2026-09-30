@@ -1,0 +1,219 @@
+.auto-selection-container {
+    background: #6366F1;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.btn-selection {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-selection:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: #6366F1;
+    color: white;
+    padding: 12px 20px;
+}
+
+/* Premium - Warna Oren */
+.btn-premium {
+    background: #FF8C00;
+    color: white;
+}
+
+.btn-premium:hover {
+    background: #FF7F00;
+}
+
+/* Standard - Warna Merah */
+.btn-standard {
+    background: #DC2626;
+    color: white;
+}
+
+.btn-standard:hover {
+    background: #B91C1C;
+}
+
+/* Economy - Warna Hijau Muda */
+.btn-economy {
+    background: #4ADE80;
+    color: white;
+}
+
+.btn-economy:hover {
+    background: #22C55E;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-list li {
+    padding: 4px 0;
+    font-size: 0.9rem;
+}
+
+.info-list .price {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #ffeb3b;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.algorithm-info {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.booth.auto-selected {
+    border: 3px solid #ffd700 !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7) !important;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Modal customization */
+.modal-header {
+    background: #6366F1;
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.form-check-input:checked {
+    background-color: #6366F1;
+    border-color: #6366F1;
+}
+
+/* Adjust overly large buttons */
+button.btn-confirm,
+button.btn-recommend {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+/* Scrollable modal content */
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Tooltip styling */
+#boothTooltip {
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    max-width: 200px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#boothTooltip .badge {
+    font-size: 0.7rem;
+    margin: 1px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auto-selection-container {
+        padding: 15px;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .btn-selection {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .info-card {
+        padding: 12px;
+    }
+}
+
+/* Sembunyikan semua info card */
+.info-cards>div {
+    display: none;
+}
+
+/* Tampilkan info card sesuai radio button yang dipilih */
+#premium:checked~.info-cards .card-premium,
+#strategic:checked~.info-cards .card-strategic,
+#basic:checked~.info-cards .card-basic {
+    display: block;
+}
+
+.hidden-radio {
+    display: none;
+}
+
+.btn-selection {
+    cursor: pointer;
+}

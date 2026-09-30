@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venue Seating Layout</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+
+    .container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      background-color: #f5e6d3;
+      border: 2px solid #333;
+      min-height: 500px;
+      position: relative;
+    }
+
+    .venue-layout {
+      width: 1600px;
+      height: 400px;
+      position: relative;
+      background-color: #f5e6d3;
+      padding: 20px;
+    }
+
+    /* Stage areas */
+    .stage-area {
+      position: absolute;
+      background-color: #d3d3d3;
+      border: 2px solid #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      padding: 5px;
+      word-break: break-word;
+    }
+
+    .main-stage {
+      left: 20px;
+      top: 180px;
+      width: 80px;
+      height: 100px;
+    }
+
+    .vip-stage {
+      left: 120px;
+      top: 180px;
+      width: 80px;
+      height: 100px;
+    }
+
+    .control-booth {
+      position: absolute;
+      right: 180px;
+      top: 30px;
+      width: 60px;
+      height: 60px;
+      background-color: #ffa500;
+      border: 2px solid #ff8c00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .control-booth div {
+      transform: rotate(0deg);
+      /* Tidak perlu rotasi karena sudah sesuai */
+      font-family: monospace;
+      /* Font lebih rapi untuk denah */
+    }
+
+    /* Seating sections */
+    .seating-section {
+      position: absolute;
+      display: grid;
+      gap: 2px;
+    }
+
+    .seat {
+      width: 25px;
+      height: 25px;
+      border: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Section B - Green */
+    .section-b {
+      left: 220px;
+      top: 160px;
+      grid-template-columns: repeat(18, 1fr);
+    }
+
+    .section-b .seat {
+      background-color: #4CAF50;
+    }
+
+    /* Section T1 - Kiri (T1-T10) */
+    .section-t1-left {
+      left: 300px;
+      top: 220px;
+      grid-template-columns: repeat(5, 1fr);
+      /* 5 kolom horizontal */
+      grid-template-rows: repeat(2, 1fr);
+      /* 2 baris */
+      gap: 5px;
+    }
+
+    /* Section T1 - Kanan (T11-T20) */
+    .section-t1-right {
+      left: 530px;
+      /* Jarak lebih jauh untuk layout horizontal */
+      top: 220px;
+      grid-template-columns: repeat(5, 1fr);
+      /* 5 kolom horizontal */
+      grid-template-rows: repeat(2, 1fr);
+      /* 2 baris */
+      gap: 5px;
+    }
+
+    .section-t1-left .seat,
+    .section-t1-right .seat {
+      background-color: #FFF176;
+      color: #333;
+      border: 1px solid #aaa;
+      text-align: center;
+      padding: 8px;
+      font-weight: bold;
+      width: 30px;
+      height: 30px;
+    }
+
+    /* Section A - Pink */
+    .section-a {
+      left: 220px;
+      top: 320px;
+      grid-template-columns: repeat(18, 1fr);
+    }
+
+    .section-a .seat {
+      background-color: #FF69B4;
+    }
+
+    /* Section D - Brown */
+    .section-d {
+      left: 760px;
+      top: 160px;
+      grid-template-columns: repeat(25, 1fr);
+    }
+
+    .section-d .seat {
+      background-color: #8D6E63;
+    }
+
+    /* Section E - Blue */
+    .section-e {
+      left: 740px;
+      top: 230px;
+      grid-template-columns: repeat(14, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .section-e .seat {
+      background-color: #2196F3;
+    }
+
+    /* Section F - Red */
+    .section-f {
+      left: 1165px;
+      top: 230px;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .section-f .seat {
+      background-color: #F44336;
+    }
+
+    /* Section C - Orange */
+    .section-c {
+      left: 760px;
+      top: 320px;
+      grid-template-columns: repeat(25, 1fr);
+    }
+
+    .section-c .seat {
+      background-color: #FF9800;
+    }
+
+    /* Scrollbar styling */
+    .container::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="venue-layout">
+      <!-- Stage Areas -->
+      <div class="stage-area main-stage">Main Stage</div>
+      <div class="stage-area vip-stage">Tenda VIP</div>
+
+      <!-- Control Booth -->
+      <div class="control-booth">
+        <div>S<br>T—+—B<br>U</div>
+      </div>
+
+      <!-- Section B (Green) -->
+      <div class="seating-section section-b">
+        <div class="seat">B1</div>
+        <div class="seat">B2</div>
+        <div class="seat">B3</div>
+        <div class="seat">B4</div>
+        <div class="seat">B5</div>
+        <div class="seat">B6</div>
+        <div class="seat">B7</div>
+        <div class="seat">B8</div>
+        <div class="seat">B9</div>
+        <div class="seat">B10</div>
+        <div class="seat">B11</div>
+        <div class="seat">B12</div>
+        <div class="seat">B13</div>
+        <div class="seat">B14</div>
+        <div class="seat">B15</div>
+        <div class="seat">B16</div>
+        <div class="seat">B17</div>
+        <div class="seat">B18</div>
+      </div>
+
+      <!-- Section T1 Left (Yellow) -->
+      <div class="seating-section section-t1-left">
+        <div class="seat">T1</div>
+        <div class="seat">T2</div>
+        <div class="seat">T3</div>
+        <div class="seat">T4</div>
+        <div class="seat">T5</div>
+        <div class="seat">T6</div>
+        <div class="seat">T7</div>
+        <div class="seat">T8</div>
+        <div class="seat">T9</div>
+        <div class="seat">T10</div>
+      </div>
+
+      <!-- Section T1 Right (Yellow) -->
+      <div class="seating-section section-t1-right">
+        <div class="seat">T11</div>
+        <div class="seat">T12</div>
+        <div class="seat">T13</div>
+        <div class="seat">T14</div>
+        <div class="seat">T15</div>
+        <div class="seat">T16</div>
+        <div class="seat">T17</div>
+        <div class="seat">T18</div>
+        <div class="seat">T19</div>
+        <div class="seat">T20</div>
+      </div>
+
+
+      <!-- Section A (Pink) -->
+      <div class="seating-section section-a">
+        <div class="seat">A1</div>
+        <div class="seat">A2</div>
+        <div class="seat">A3</div>
+        <div class="seat">A4</div>
+        <div class="seat">A5</div>
+        <div class="seat">A6</div>
+        <div class="seat">A7</div>
+        <div class="seat">A8</div>
+        <div class="seat">A9</div>
+        <div class="seat">A10</div>
+        <div class="seat">A11</div>
+        <div class="seat">A12</div>
+        <div class="seat">A13</div>
+        <div class="seat">A14</div>
+        <div class="seat">A15</div>
+        <div class="seat">A16</div>
+        <div class="seat">A17</div>
+        <div class="seat">A18</div>
+      </div>
+
+      <!-- Section D (Brown) -->
+      <div class="seating-section section-d">
+        <div class="seat">D1</div>
+        <div class="seat">D2</div>
+        <div class="seat">D3</div>
+        <div class="seat">D4</div>
+        <div class="seat">D5</div>
+        <div class="seat">D6</div>
+        <div class="seat">D7</div>
+        <div class="seat">D8</div>
+        <div class="seat">D9</div>
+        <div class="seat">D10</div>
+        <div class="seat">D11</div>
+        <div class="seat">D12</div>
+        <div class="seat">D13</div>
+        <div class="seat">D14</div>
+        <div class="seat">D15</div>
+        <div class="seat">D16</div>
+        <div class="seat">D17</div>
+        <div class="seat">D18</div>
+        <div class="seat">D19</div>
+        <div class="seat">D20</div>
+        <div class="seat">D21</div>
+        <div class="seat">D22</div>
+        <div class="seat">D23</div>
+        <div class="seat">D24</div>
+        <div class="seat">D25</div>
+      </div>
+
+      <!-- Section E (Blue) -->
+      <div class="seating-section section-e">
+        <div class="seat">E28</div>
+        <div class="seat">E27</div>
+        <div class="seat">E26</div>
+        <div class="seat">E25</div>
+        <div class="seat">E24</div>
+        <div class="seat">E23</div>
+        <div class="seat">E22</div>
+        <div class="seat">E21</div>
+        <div class="seat">E20</div>
+        <div class="seat">E19</div>
+        <div class="seat">E18</div>
+        <div class="seat">E17</div>
+        <div class="seat">E16</div>
+        <div class="seat">E15</div>
+        <div class="seat">E1</div>
+        <div class="seat">E2</div>
+        <div class="seat">E3</div>
+        <div class="seat">E4</div>
+        <div class="seat">E5</div>
+        <div class="seat">E6</div>
+        <div class="seat">E7</div>
+        <div class="seat">E8</div>
+        <div class="seat">E9</div>
+        <div class="seat">E10</div>
+        <div class="seat">E11</div>
+        <div class="seat">E12</div>
+        <div class="seat">E13</div>
+        <div class="seat">E14</div>
+      </div>
+
+      <!-- Section F (Red) -->
+      <div class="seating-section section-f">
+        <div class="seat">F20</div>
+        <div class="seat">F19</div>
+        <div class="seat">F18</div>
+        <div class="seat">F17</div>
+        <div class="seat">F16</div>
+        <div class="seat">F15</div>
+        <div class="seat">F14</div>
+        <div class="seat">F13</div>
+        <div class="seat">F12</div>
+        <div class="seat">F11</div>
+        <div class="seat">F1</div>
+        <div class="seat">F2</div>
+        <div class="seat">F3</div>
+        <div class="seat">F4</div>
+        <div class="seat">F5</div>
+        <div class="seat">F6</div>
+        <div class="seat">F7</div>
+        <div class="seat">F8</div>
+        <div class="seat">F9</div>
+        <div class="seat">F10</div>
+      </div>
+
+      <!-- Section C (Orange) -->
+      <div class="seating-section section-c">
+        <div class="seat">C1</div>
+        <div class="seat">C2</div>
+        <div class="seat">C3</div>
+        <div class="seat">C4</div>
+        <div class="seat">C5</div>
+        <div class="seat">C6</div>
+        <div class="seat">C7</div>
+        <div class="seat">C8</div>
+        <div class="seat">C9</div>
+        <div class="seat">C10</div>
+        <div class="seat">C11</div>
+        <div class="seat">C12</div>
+        <div class="seat">C13</div>
+        <div class="seat">C14</div>
+        <div class="seat">C15</div>
+        <div class="seat">C16</div>
+        <div class="seat">C17</div>
+        <div class="seat">C18</div>
+        <div class="seat">C19</div>
+        <div class="seat">C20</div>
+        <div class="seat">C21</div>
+        <div class="seat">C22</div>
+        <div class="seat">C23</div>
+        <div class="seat">C24</div>
+        <div class="seat">C25</div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

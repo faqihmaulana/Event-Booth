@@ -30,6 +30,7 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/eventku-3d.css') }}" rel="stylesheet">
 
 </head>
 

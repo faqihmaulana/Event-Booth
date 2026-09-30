@@ -14,6 +14,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/denah.css">
+	<link rel="stylesheet" href="{{ asset('css/eventku-3d.css') }}">
 	<link href="{{ asset('admin/img/favicon.png') }}" rel="icon">
 
 	<style>

@@ -130,8 +130,8 @@
                                         href="{{ route('admin.statistics') }}">Statistik</a>
                                 </li>
                                  <li>
-                                    <a class="dropdown-item {{ request()->routeIs('admin.report*') ? 'active' : '' }}"
-                                        href="{{ route('admin.report') }}">Rekap Laporan</a>
+                                    <a class="dropdown-item {{ request()->routeIs('report*') ? 'active' : '' }}"
+                                        href="{{ route('report') }}">Rekap Laporan</a>
                                 </li>
                             </ul>
                         </li>
